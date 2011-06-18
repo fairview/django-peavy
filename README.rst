@@ -107,15 +107,17 @@ Configuration
         }
     }
          
+4. Add ``peavy.middleware.RequestLoggingMiddleware`` to MIDDLEWARE_CLASSES.
+
 The last two steps can be skipped if you don't want the UI.
 
-4. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
+5. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
 
     urlpatterns += patterns('',
         (r'^peavy/', include('peavy.urls')),
     )
 
-5. Run ``manage.py collectstatic`` to copy peavy's media into place.
+6. Run ``manage.py collectstatic`` to copy peavy's media into place.
 
 Notes
 -----
