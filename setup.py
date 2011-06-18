@@ -2,6 +2,10 @@ import sys
 from setuptools import setup, find_packages
 
 peavy = __import__('peavy')
+
+with open('README.rst') as file:
+    long_description = file.read()
+
 setup(
     author = 'Fairview Computing LLC',
     author_email = 'john@fairviewcomputing.com',
@@ -16,6 +20,7 @@ setup(
         'Topic :: System :: Logging',
     ],
     description = peavy.__doc__,
+    long_description=long_description,
     download_url='http://github.com/fairview/django-peavy/downloads',
     install_requires = [
         'Django>=1.3',
