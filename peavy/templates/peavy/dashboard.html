@@ -1,0 +1,145 @@
+{% extends "peavy/base.html" %}
+{% load i18n humanize peavy %}
+
+{% block title %}{% trans "dashboard" %}{% endblock title %}
+
+{% block extra_head %}
+<link type="text/css" href="{{STATIC_URL}}peavy/css/smoothness/jquery-ui-1.8.13.custom.css" rel="stylesheet" />	
+{% endblock extra_head %}
+
+{% block content %}
+{% pagenavigator records request.get_full_path %}
+<div id="map"></div>
+{% if request.GET %}
+<div id="filters">
+    <div>Filters:</div>
+    <ul>
+        {% for key, values in request.GET.iterlists %}
+        {% for value in values %}
+        <li><a title "Clear filter" href="{{request.path}}{% query_string key-=value %}"><span class="delete">X</span>{{key}} = {{value}}</a></li>
+        {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<div id="records">
+    {% for record in records.object_list %}
+    <div class="record" id="record-{{record.pk}}">
+        <div class="timestamp">{{record.timestamp|date:"Y-m-d"}}&nbsp;{{record.timestamp|date:"H:i:s"}}</div>
+        <div class="detail {{record.level|lower}}">
+            <div class="message">{{record.message|linebreaksbr}}</div>
+            <div class="meta">
+                {% if record.stack_trace %}
+                <div class="debug">{{record.stack_trace|linebreaksbr}}</div>
+                {% endif %}
+                <div class="logger">
+                    <a
+                        title="Click to filter on logger {{record.logger}}"
+                        href="{{request.path}}{% query_string logger=record.logger page= %}">{{record.logger}}</a>
+                </div>
+                <div class="level">
+                    <a
+                        title="Click to filter on log level {{record.level}}"
+                        href="{{request.path}}{% query_string level=record.level page= %}">{{record.level}}</a>
+                </div>
+                <div class="application">
+                    <a
+                        title="Click to filter on application {{record.application}}"
+                        href="{{request.path}}{% query_string application=record.application page= %}">{{record.application}}</a>
+                </div>
+                <div class="origin_server">
+                    <a
+                        title="Click to filter on server {{record.origin_server}}"
+                        href="{{request.path}}{% query_string origin_server=record.origin_server page= %}">{{record.origin_server}}</a>
+                </div>
+                <div class="client_ip">
+                    <a
+                        title="Click to filter on client IP {{record.client_ip}}"
+                        href="{{request.path}}{% query_string client_ip=record.client_ip page= %}">{{record.client_ip}}</a>
+                </div>
+                <div class="request_id request_id-{{record.uuid}}" data-request-id="{{record.uuid}}">
+                    <a
+                        title="Click to filter on request ID {{record.uuid}}"
+                        href="{{request.path}}{% query_string request_id=record.uuid page= %}">{{record.uuid}}</a>
+                </div>
+                <div class="user">
+                    <a
+                        title="Click to filter on request ID {{record.user}}"
+                        href="{{request.path}}{% query_string username=record.user page= %}">{{record.user}}</a>
+                </div>
+                {% if record.debug_page and user.is_superuser %}
+                <div class="debug">
+                    <a target="_blank" href="{% url peavy_debug_page record.pk %}">View debug page.</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
+
+{% block js_includes %}
+{{block.super}}
+<script src="{{STATIC_URL}}peavy/js/jquery.infinitescroll.min.js"></script>
+<script src="{{STATIC_URL}}peavy/js/jquery-ui-1.8.13.custom.min.js"></script>
+{% endblock js_includes %}
+
+{% block js %}
+<script>
+function updateMap() {
+    var dates = {};
+    var newMap = '<ul>';
+    $('div.timestamp').each(function(i) {
+        var date = $(this).text().split(/\s/)[0];
+        if (!(date in dates)) {
+            dates[date] = 1;
+            newMap += '<li><a href="#' + $(this).parents('div.record').attr('id') + '">' + date + '</a></li>';
+        }
+    });
+    newMap += '</ul>';
+    $('#map').html(newMap);
+}
+$(function() {
+    updateMap();
+    $('#records').infinitescroll({
+        navSelector: 'div.page_navigator',
+        nextSelector: 'div.page_navigator a.next',
+        itemSelector: '#records div.record',
+        donetext: '{% trans "No more records." %}',
+        loadingImg: '{{STATIC_URL}}peavy/img/loading.gif',
+        loadingText: '{% trans "Fetching more records..." %}'
+    }, updateMap);
+
+    $('#map a').live('click', function(e) {
+        var record = $($(this).attr('href'));
+        $('html, body').animate({scrollTop: record.offset().top}),
+        record.animate({backgroundColor: '#379'}, 1000)
+            .animate({backgroundColor: '#000'}, 1000);
+        return false;
+    });
+
+    $('div.record').live('click', function(e) {
+        $('div.meta', this).toggle();
+    });
+
+    $('div.record').live('mouseenter', function() {
+        var request_id = 'div.request_id-' + $('div.request_id', this).data('request-id');
+        var records = $(request_id).parents('div.record');
+        records.addClass('highlight');
+        if (records.length > 0) {
+            records.eq(0).addClass('highlight-last');
+            records.last().addClass('highlight-first');
+        } else {
+            records.addClass('highlight-first highlight-last');
+        }
+    });
+
+    $('div.record').live('mouseleave', function() {
+        var request_id = 'div.request_id-' + $('div.request_id', this).data('request-id');
+        $(request_id).parents('div.record').removeClass('highlight highlight-first highlight-last');
+    });
+});
+</script>
+{% endblock js %}

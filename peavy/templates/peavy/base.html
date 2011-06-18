@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>peavy :: {% block title %}{% endblock title %}</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width; initial-scale=1" />
+        <link rel="stylesheet" href="{{STATIC_URL}}peavy/css/peavy.css" type="text/css"/>
+       {% block page_style %}{% endblock %}{% block extra_head %}{% endblock %}
+    </head>
+    <body class="{% block body_class %}base{% endblock %}">
+        <header>
+            <nav id="nav1">
+                <ul>
+                    <li><a class="home" href="{% url home %}">home</a></li>
+                    <li><a class="dashboard" href="{% url peavy_dashboard %}">dashboard</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section id="content">
+            {% block content %}{% endblock content %}
+        </section>
+        <footer>
+            {% block footer %}
+                peavy &#169; {% now "Y" %} <a href="http://fairviewcomputing.com/">fairview computing llc</a>
+            {% endblock %}
+        </footer>
+        {% block js_includes %}
+        <script src="{{STATIC_URL}}peavy/js/jquery-1.5.1.min.js"></script>
+        {% endblock js_includes %}
+        {% block js %}{% endblock js %}
+    </body>
+</html>
