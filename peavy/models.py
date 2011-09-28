@@ -13,7 +13,7 @@ class LogRecord(models.Model):
     application, and for requests with errors, a stack trace and a copy of
     Django's server error page.
     """
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
+    timestamp = models.DateTimeField(db_index=True, default=datetime.datetime.now)
 
     application = models.CharField(
         max_length = 256,
@@ -29,7 +29,7 @@ class LogRecord(models.Model):
     origin_server = models.CharField(
         max_length = 256,
         help_text = _("The server logging this record."),
-        default = socket.getfqdn,
+        default = socket.gethostname,
         db_index = True
     )
 
