@@ -28,7 +28,11 @@ setup(
     ],
     license = "MIT License",
     name = 'django-peavy',
-    packages = find_packages(),
+    packages = [
+        'peavy',
+        'peavy.migrations',
+        'peavy.templatetags',
+    ],
     package_data = {
         'peavy': [
             'README.rst',
@@ -37,6 +41,12 @@ setup(
            'static/*/*/*',
         ],
     },
+    setup_requires = [
+        'Django>=1.3',
+        'South>=0.7.2',
+        'psycopg2==2.4.1', # 2.4.2 causes trouble with Django 1.3(.1) unit tests
+    ],
+    test_suite='tests.main',
     url = 'http://github.com/fairview/django-peavy',
     version = peavy.get_version(),
     zip_safe = True,

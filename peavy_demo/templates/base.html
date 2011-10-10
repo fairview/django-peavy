@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+        <title>django-peavy demo</title>
+		<link rel="stylesheet" href="{{STATIC_URL}}main.css" type="text/css"/>
+	</head>
+    <body>
+        <div id="main">
+            {% block main %}{% endblock main %}
+        </div>
+    </body>
+</html>

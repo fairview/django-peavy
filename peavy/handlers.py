@@ -43,6 +43,7 @@ class DjangoDBHandler(ExceptionLoggingHandler):
     """
     A handler that stores log records in a Django model.
     """
+    
     def emit(self, record):
         from django.db import transaction
 
@@ -56,8 +57,11 @@ class DjangoDBHandler(ExceptionLoggingHandler):
         stack_trace = self.get_stack_trace(record, request)
         debug_page = self.get_debug_page(record, request)
 
-        with transaction.commit_on_success():
-            LogRecord.objects.create(
+        from django.conf import settings
+        db_name = getattr(settings, 'PEAVY_DATABASE_NAME', 'peavy')
+
+        with transaction.commit_on_success(using=db_name):
+            LogRecord.objects.using(db_name).create(
                 logger = record.name,
                 level = record.levelname,
                 message = record.msg,
@@ -67,7 +71,6 @@ class DjangoDBHandler(ExceptionLoggingHandler):
                 stack_trace = stack_trace,
                 debug_page = debug_page
             )
-
 
 class AdminEmailHandler(ExceptionLoggingHandler):
     """

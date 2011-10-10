@@ -1,0 +1,27 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+input {
+    margin: 0 0 1em 0;
+}
+
+label {
+    display: block;
+}
+
+table {
+    margin: 1em 0;
+}
+
+td {
+    text-align: left;
+    vertical-align: left;
+    padding: 4px 20px 4px 4px;
+}
+
+th {
+    text-align: left;
+    background: #f0f0f0;
+    padding: 4px 20px 4px 4px;
+}

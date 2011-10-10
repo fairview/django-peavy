@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Log in" %}{% endblock %}
+
+{% block main %}
+
+<h2>{% trans "Log in" %}</h2>
+
+{% if form.errors %}
+<p class="error">{% trans "Please correct the errors below" %}:</p>
+{% endif %}
+
+<form method="post" action="?next={{ next|default:"/" }}">
+{% csrf_token %}
+<dl>
+<dt><label for="id_username">Username:</label>{% if form.username.errors %} <span class="error">{{ form.username.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.username }}</dd>
+<dt><label for="id_password">Password:</label>{% if form.password.errors %} <span class="error">{{ form.password.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.password }}</dd>
+<dt><input type="submit" value="Log in" /></dt>
+</dl>
+</form>
+
+{% endblock main %}

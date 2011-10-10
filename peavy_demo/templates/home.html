@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block main %}
+    <p>{% trans "Tell us one of your favorite quotes from a movie or TV series." %}</p>
+    <form action="{% url home %}" method="post">
+        <div>
+            {{form.submitter.label_tag}}
+            {{form.submitter}}
+            {{form.submitter.errors}}
+        </div>
+
+        <div>
+            {{form.show.label_tag}}
+            {{form.show}}
+            {{form.show.errors}}
+        </div>
+
+        <div>
+            {{form.character.label_tag}}
+            {{form.character}}
+            {{form.character.errors}}
+        </div>
+
+        <div>
+            {{form.text.label_tag}}
+            {{form.text}}
+            {{form.text.errors}}
+        </div>
+
+        <button type="submit">{% trans "Submit" %}</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "Submitted at" %}</th>
+                <th>{% trans "Submitted by" %}</th>
+                <th>{% trans "Show" %}</th>
+                <th>{% trans "Character" %}</th>
+                <th>{% trans "Quote" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quote in quotes %}
+            <tr>
+                <td>{{quote.timestamp|date:"F j, Y g:i a"}}</td>
+                <td>{{quote.submitter}}</td>
+                <td>{{quote.show}}</td>
+                <td>{{quote.character}}</td>
+                <td><em>{{quote.text}}</em></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">{% trans "No quotes yet. Sad." %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock main %}
