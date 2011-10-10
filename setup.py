@@ -41,7 +41,7 @@ setup(
            'static/*/*/*',
         ],
     },
-    setup_requires = [
+    tests_require = [
         'Django>=1.3',
         'South>=0.7.2',
         'psycopg2==2.4.1', # 2.4.2 causes trouble with Django 1.3(.1) unit tests

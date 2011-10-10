@@ -196,7 +196,7 @@ and lets you check out the UI. To run it:
    $ django-admin.py runserver
 
 10. Browse to http://localhost:8000/, enter a movie quote, then check the logging
-   at http://localhost:8000/peavy/.
+    at http://localhost:8000/peavy/.
 
 Notes
 -----
