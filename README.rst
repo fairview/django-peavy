@@ -76,7 +76,11 @@ Configuration
 
    In this case, you'll just create peavy's tables with syncdb.
 
-3. Add the logging configuration. For example::
+3. Add the peavy database router::
+
+    DATABASE_ROUTERS = ['peavy.routers.DjangoDBRouter']
+
+4. Add the logging configuration. For example::
 
     LOGGING = {
         'version': 1,
@@ -142,21 +146,21 @@ Configuration
         }
     }
 
-4. Add ``peavy.middleware.RequestLoggingMiddleware`` to MIDDLEWARE_CLASSES.
+5. Add ``peavy.middleware.RequestLoggingMiddleware`` to MIDDLEWARE_CLASSES.
 
-5. Run ``manage.py migrate`` to create the database tables, or if you're really
+6. Run ``manage.py migrate`` to create the database tables, or if you're really
    logging to a second database and have disabled South migrations for peavy,
    run ``manage.py syncdb``.
 
 The last two steps can be skipped if you don't want the UI.
 
-6. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
+7. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
 
     urlpatterns += patterns('',
         (r'^peavy/', include('peavy.urls')),
     )
 
-7. Run ``manage.py collectstatic`` to copy peavy's media into place.
+8. Run ``manage.py collectstatic`` to copy peavy's media into place.
 
 Demo Application
 ----------------
