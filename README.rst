@@ -157,7 +157,7 @@ The last two steps can be skipped if you don't want the UI.
 7. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
 
     urlpatterns += patterns('',
-        (r'^peavy/', include('peavy.urls')),
+        (r'^peavy/', include('peavy.urls', namespace='peavy')),
     )
 
 8. Run ``manage.py collectstatic`` to copy peavy's media into place.
@@ -212,6 +212,5 @@ and it's OK. Oh, come on, it's *required*.
 Future
 ------
 
-* Adding search to the UI.
-* Possibly, support for logging to non-relational databases.
+* support for logging to other sinks: message queues, non-relational databases.
 

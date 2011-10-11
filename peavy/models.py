@@ -77,14 +77,5 @@ class LogRecord(models.Model):
         )
 
     def __unicode__(self):
-        return "[{0} {1} {2} {3} {4} {5} {6}] {7}".format(
-            self.timestamp,
-            self.application,
-            self.origin_server,
-            self.client_ip,
-            self.uuid,
-            self.user,
-            self.logger,
-            self.level
-        )
+        return unicode(self.pk)
 

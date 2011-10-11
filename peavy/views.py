@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.core.paginator import EmptyPage, Paginator
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 from django import http
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -47,6 +47,20 @@ def dashboard(request):
     users = request.GET.getlist('username')
     if users:
         records = records.filter(user__in=users)
+
+    message_filters = request.GET.getlist('message')
+    if message_filters:
+        message_query = None
+        for term in message_filters:
+            print "message filter:", term
+            if not term:
+                continue
+            if message_query is None:
+                message_query = Q(message__iregex=term)
+            else:
+                message_query &= Q(message__iregex=term)
+        if message_query is not None:
+            records = records.filter(message_query)
 
     page_number = int(request.GET.get('page', 1))
     count = int(request.GET.get('count', 20))

@@ -16,8 +16,8 @@ def home(request):
     if request.method == 'POST':
         form = QuoteForm(request.POST)
         if form.is_valid():
-            form.save()
-            logger.info('Quote submitted.')
+            quote = form.save()
+            logger.info('Quote from {0} in {1} submitted by {2}'.format(quote.character, quote.show, quote.submitter))
 
             return HttpResponseRedirect(reverse('home'))
     else:

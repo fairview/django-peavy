@@ -7,6 +7,20 @@
 <link type="text/css" href="{{STATIC_URL}}peavy/css/smoothness/jquery-ui-1.8.13.custom.css" rel="stylesheet" />	
 {% endblock extra_head %}
 
+{% block extra_nav %}
+<li class="search">
+    <form action="{{request.path}}" method="get">
+        {% for name, values in request.GET.lists %}
+            {% for value in values %}
+            <input type="hidden" name="{{name}}" value="{{value}}"/>
+            {% endfor %}
+        {% endfor %}
+        <input type="text" id="search_box" class="hint" name="message" value="{% trans "Search log messages" %}"/>
+        <button type="submit">{% trans "Go" %}</button>
+    </form>
+</li>
+{% endblock extra_nav %}
+
 {% block content %}
 {% pagenavigator records request.get_full_path %}
 <div id="map"></div>
@@ -57,19 +71,19 @@
                         title="Click to filter on client IP {{record.client_ip}}"
                         href="{{request.path}}{% query_string client_ip=record.client_ip page= %}">{{record.client_ip}}</a>
                 </div>
+                <div class="user">
+                    <a
+                        title="Click to filter on user {{record.user}}"
+                        href="{{request.path}}{% query_string username=record.user page= %}">{{record.user}}</a>
+                </div>
                 <div class="request_id request_id-{{record.uuid}}" data-request-id="{{record.uuid}}">
                     <a
                         title="Click to filter on request ID {{record.uuid}}"
                         href="{{request.path}}{% query_string request_id=record.uuid page= %}">{{record.uuid}}</a>
                 </div>
-                <div class="user">
-                    <a
-                        title="Click to filter on request ID {{record.user}}"
-                        href="{{request.path}}{% query_string username=record.user page= %}">{{record.user}}</a>
-                </div>
                 {% if record.debug_page and user.is_superuser %}
                 <div class="debug">
-                    <a target="_blank" href="{% url peavy_debug_page record.pk %}">View debug page.</a>
+                    <a target="_blank" href="{% url peavy:debug_page record.pk %}">View debug page.</a>
                 </div>
                 {% endif %}
             </div>
@@ -139,6 +153,20 @@ $(function() {
     $('div.record').live('mouseleave', function() {
         var request_id = 'div.request_id-' + $('div.request_id', this).data('request-id');
         $(request_id).parents('div.record').removeClass('highlight highlight-first highlight-last');
+    });
+
+    $('#search_box').live('focusin', function() {
+        if ($(this).val() === "{% trans "Search log messages" %}") {
+            $(this).val('');
+            $(this).removeClass('hint');
+        }
+    });
+
+    $('#search_box').live('focusout', function() {
+        if ($(this).val() === '') {
+            $(this).val("{% trans "Search log messages" %}");
+            $(this).addClass('hint');
+        }
     });
 });
 </script>

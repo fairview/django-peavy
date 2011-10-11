@@ -97,7 +97,7 @@ class AdminEmailHandler(ExceptionLoggingHandler):
                 "View the log entries for this request:\n\n"
                 "https://%s%s?request_id=%s\n" % (
                     site.domain,
-                    reverse('peavy_dashboard'),
+                    reverse('peavy:dashboard'),
                     record.uuid
                 )
             )

@@ -1,27 +1,49 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
+    background: #000;
+    color: #ddd;
+    padding: 2em;
 }
 
-input {
+a {
+    color: #9cd;
+}
+
+input, textarea {
     margin: 0 0 1em 0;
+    float: left;
+    clear: right;
 }
 
 label {
     display: block;
+    float: left;
+    clear: left;
+    width: 25%;
+}
+
+.controls {
+    float: none;
+    clear: both;
+    padding-left: 25%;
 }
 
 table {
     margin: 1em 0;
+    font-size: .9em;
 }
 
 td {
     text-align: left;
-    vertical-align: left;
+    vertical-align: top;
     padding: 4px 20px 4px 4px;
 }
 
 th {
     text-align: left;
     background: #f0f0f0;
+    color: #000;
     padding: 4px 20px 4px 4px;
+    font-size: .75em;
+    text-transform: uppercase;
 }

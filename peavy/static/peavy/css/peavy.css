@@ -100,10 +100,29 @@ nav {
     background: #333;
     box-shadow: 0 4px 2px #3F3F3F;
     text-transform: uppercase;
+    overflow: auto;
 }
 
+    nav ul {
+        overflow: auto;
+    }
+
     nav li {
-        display: inline;
+        float: left;
+    }
+
+    nav li.search {
+        float: right;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav a {
+        padding: 2px;
+    }
+
+    nav input {
+        font-size: .75em;
     }
 
 ul {
@@ -126,6 +145,10 @@ ul {
     font-weight: bold;
     padding: 2px;
     margin: 0 .5em 0 0;
+}
+
+.hint {
+    color: #aaa;
 }
 
 #content {
@@ -200,15 +223,18 @@ ul {
         .timestamp {
             float: left;
             clear: left;
-            padding: 0 0 .5em 0;
-            width: 15%;
+            color: #777;
+            padding: .25em 0 .5em 0;
+            font-size: .75em;
+            font-family: Menlo, Courier, monospace;
+            white-space: nowrap;
         }
 
         .detail {
             float: left;
             clear: right;
+            max-width: 80%;
             padding: 0 0 .5em 1em;
-            width: 80%;
         }
 
             .detail.critical .message,
