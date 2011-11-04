@@ -52,7 +52,6 @@ def dashboard(request):
     if message_filters:
         message_query = None
         for term in message_filters:
-            print "message filter:", term
             if not term:
                 continue
             if message_query is None:
