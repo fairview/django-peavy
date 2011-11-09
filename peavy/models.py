@@ -40,7 +40,14 @@ class LogRecord(models.Model):
         db_index = True
     )
 
-    user = models.CharField(
+    user_pk = models.IntegerField(
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text = _("The primary key of the user making the request in which this record was logged."),
+    )
+
+    username = models.CharField(
         max_length = 256,
         help_text = _("The username of the user making the request in which this record was logged."),
         blank = True,

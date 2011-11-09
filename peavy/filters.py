@@ -11,7 +11,12 @@ class BasicFilter(logging.Filter):
         request = RequestLoggingMiddleware.context.request
 
         record.uuid = getattr(request, "uuid", "?")
-        record.user = getattr(request, "user", "?")
+        if hasattr(request, "user"):
+            record.user_pk = getattr(request.user, 'pk', None)
+            record.username = request.user.username
+        else:
+            record.user_pk = None
+            record.username = "?"
         meta = getattr(request, "META", {})
         record.client_ip = meta.get("REMOTE_ADDR", "?")
         return True

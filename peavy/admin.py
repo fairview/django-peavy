@@ -5,9 +5,9 @@ from django.contrib import admin
 from peavy.models import LogRecord
 
 class LogRecordAdmin(admin.ModelAdmin):
-    list_display = ('timestamp', 'application', 'origin_server', 'client_ip', 'user', 'logger', 'level', 'message')
-    list_filter = ('application', 'origin_server', 'user', 'logger', 'level')
-    search_fields = ('application', 'origin_server', 'client_ip', 'user', 'logger', 'level', 'message')
+    list_display = ('timestamp', 'application', 'origin_server', 'client_ip', 'username', 'logger', 'level', 'message')
+    list_filter = ('application', 'origin_server', 'username', 'logger', 'level')
+    search_fields = ('application', 'origin_server', 'client_ip', 'username', 'logger', 'level', 'message')
 
     fieldsets = (
         (
@@ -25,7 +25,8 @@ class LogRecordAdmin(admin.ModelAdmin):
             {
                 'fields': (
                     'client_ip',
-                    'user',
+                    'user_pk',
+                    'username',
                 )
             }
         ),

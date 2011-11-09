@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 
 from peavy.models import LogRecord
 
-@permission_required('peavy.view_logs')
+@permission_required("peavy.view_logs")
 def dashboard(request):
     """
     The main view: all the logs, with filters and pagination.
@@ -20,35 +20,57 @@ def dashboard(request):
     
     records = LogRecord.objects.all()
 
-    applications = request.GET.getlist('application')
+    applications = request.GET.getlist("application")
     if applications:
         records = records.filter(application__in=applications)
 
-    client_ips = request.GET.getlist('client_ip')
+    client_ips = request.GET.getlist("client_ip")
     if client_ips:
         records = records.filter(client_ip__in=client_ips)
 
-    levels = request.GET.getlist('level')
+    levels = request.GET.getlist("level")
     if levels:
         records = records.filter(level__in=levels)
 
-    loggers = request.GET.getlist('logger')
+    loggers = request.GET.getlist("logger")
     if loggers:
         records = records.filter(logger__in=loggers)
 
-    origin_servers = request.GET.getlist('origin_server')
+    origin_servers = request.GET.getlist("origin_server")
     if origin_servers:
         records = records.filter(origin_server__in=origin_servers)
 
-    request_ids = request.GET.getlist('request_id')
+    request_ids = request.GET.getlist("request_id")
     if request_ids:
         records = records.filter(uuid__in=request_ids)
 
-    users = request.GET.getlist('username')
-    if users:
-        records = records.filter(user__in=users)
+    show_anonymous_users = False
+    user_pks = []
+    for pk in request.GET.getlist("user_pk"):
+        if pk == "None":
+            show_anonymous_users = True
+        else:
+            user_pks.append(pk)
 
-    message_filters = request.GET.getlist('message')
+    user_pk_filter = None
+
+    if show_anonymous_users:
+        user_pk_filter = Q(user_pk__isnull=True)
+
+    if user_pks:
+        if not user_pk_filter:
+            user_pk_filter = Q(user_pk__in=user_pks)
+        else:
+            user_pk_filter |= Q(user_pk__in=user_pks)
+    
+    if user_pk_filter:
+        records = records.filter(user_pk_filter)
+
+    usernames = request.GET.getlist("username")
+    if usernames:
+        records = records.filter(username__in=usernames)
+
+    message_filters = request.GET.getlist("message")
     if message_filters:
         message_query = None
         for term in message_filters:
@@ -61,16 +83,16 @@ def dashboard(request):
         if message_query is not None:
             records = records.filter(message_query)
 
-    page_number = int(request.GET.get('page', 1))
-    count = int(request.GET.get('count', 20))
+    page_number = int(request.GET.get("page", 1))
+    count = int(request.GET.get("count", 20))
 
     paginator = Paginator(object_list=records, per_page=count, allow_empty_first_page=True)
 
     if page_number < 1:
-        redirect = re.sub('page=\d+', 'page=%s' % paginator.num_pages, request.get_full_path())
+        redirect = re.sub("page=\d+", "page=%s" % paginator.num_pages, request.get_full_path())
         return http.HttpResponseRedirect(redirect)
     if page_number > paginator.num_pages:
-        redirect = re.sub('page=\d+', 'page=1', request.get_full_path())
+        redirect = re.sub("page=\d+", "page=1", request.get_full_path())
         return http.HttpResponseRedirect(redirect)
 
     records = paginator.page(page_number)
@@ -80,7 +102,7 @@ def dashboard(request):
     }
 
     return render_to_response(
-        'peavy/dashboard.html',
+        "peavy/dashboard.html",
         data,
         context_instance = RequestContext(request)
     )

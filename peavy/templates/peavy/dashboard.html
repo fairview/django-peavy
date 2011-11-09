@@ -73,8 +73,8 @@
                 </div>
                 <div class="user">
                     <a
-                        title="Click to filter on user {{record.user}}"
-                        href="{{request.path}}{% query_string username=record.user page= %}">{{record.user}}</a>
+                        title="Click to filter on user {{record.user_pk}}{% if record.username %} ({{record.username}}){% endif %}"
+                        href="{{request.path}}{% query_string user_pk=record.user_pk username=record.username page= %}">{{record.user_pk}}{% if record.username %} ({{record.username}}){% endif %}</a>
                 </div>
                 <div class="request_id request_id-{{record.uuid}}" data-request-id="{{record.uuid}}">
                     <a
