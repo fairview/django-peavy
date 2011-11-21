@@ -39,8 +39,9 @@ Configuration
 1. Add ``peavy`` to your ``INSTALLED_APPS`` setting.
 
 2. To avoid interfering with your application's database transactions, peavy
-   logs to its own database by default. Because of South's issues with multiple
-   databases, the easiest way to make this work is to create a second database
+   logs to its own database by default.
+
+   The easiest way to make this work is to create a second database
    stanza in settings.DATABASES, that mirrors the default settings under
    another name, e.g.::
 
@@ -65,10 +66,19 @@ Configuration
    work with its own connection to the database. When it commits log entries,
    your application's transactions won't be affected.
 
-   If you do want to put peavy in a truly separate database, you probably want
-   to forego South migrations for it, because of some problems South has with
-   multiple databases. You can tell South to ignore it by adding this to your
-   settings::
+   If you want to use a name other than 'peavy' for the peavy database, it
+   needs to be specified in settings.PEAVY_DATABASE_NAME.
+
+   If you want to put peavy in a truly separate database, you can still use
+   South by specifying both app and database when running peavy migrations::
+
+      $ django-admin.py migrate peavy --database=peavy
+
+   If you omit the app name, you will probably encounter errors with other apps
+   whose migrations South tries to run.
+
+   Finally, you can use a separate database but tell South to ignore it
+   completely by adding this to your settings::
 
        SOUTH_MIGRATION_MODULES = {
            'peavy': 'ignore',
