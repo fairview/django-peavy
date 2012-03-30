@@ -1,9 +1,47 @@
-import datetime
+from datetime import datetime, timedelta, tzinfo
 import socket
 
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+try:
+    import pytz
+except ImportError:
+    pytz = None
+
+ZERO = timedelta(0)
+
+
+class UTC(tzinfo):
+    """
+    UTC implementation taken from Python's docs.
+
+    Used only when pytz isn't available.
+    """
+
+    def __repr__(self):
+        return "<UTC>"
+
+    def utcoffset(self, dt):
+        return ZERO
+
+    def tzname(self, dt):
+        return "UTC"
+
+    def dst(self, dt):
+        return ZERO
+
+
+def now():
+    if getattr(settings, 'USE_TZ', False):
+        if pytz:
+            utc = pytz.utc
+        else:
+            utc = UTC()
+        return datetime.utcnow().replace(tzinfo=utc)
+    else:
+        return datetime.now()
 
 
 class LogRecord(models.Model):
@@ -14,7 +52,7 @@ class LogRecord(models.Model):
     application, and for requests with errors, a stack trace and a copy of
     Django's server error page.
     """
-    timestamp = models.DateTimeField(db_index=True, default=datetime.datetime.now)
+    timestamp = models.DateTimeField(db_index=True, default=now)
 
     application = models.CharField(
         max_length=256,
