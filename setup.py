@@ -1,5 +1,4 @@
-import sys
-from setuptools import setup, find_packages
+from setuptools import setup
 
 peavy = __import__('peavy')
 
@@ -7,9 +6,9 @@ with open('README.rst') as file:
     long_description = file.read()
 
 setup(
-    author = 'Fairview Computing LLC',
-    author_email = 'john@fairviewcomputing.com',
-    classifiers = [
+    author='Fairview Computing LLC',
+    author_email='john@fairviewcomputing.com',
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
         'Framework :: Django',
@@ -19,21 +18,21 @@ setup(
         'Programming Language :: Python',
         'Topic :: System :: Logging',
     ],
-    description = peavy.__doc__,
+    description=peavy.__doc__,
     long_description=long_description,
     download_url='http://github.com/fairview/django-peavy/downloads',
-    install_requires = [
+    install_requires=[
         'Django>=1.3',
-        'South>=0.7.2'
+        'South>=0.7.3'
     ],
-    license = "MIT License",
-    name = 'django-peavy',
-    packages = [
+    license="MIT License",
+    name='django-peavy',
+    packages=[
         'peavy',
         'peavy.migrations',
         'peavy.templatetags',
     ],
-    package_data = {
+    package_data={
         'peavy': [
             'README.rst',
             'LICENSE.txt',
@@ -41,13 +40,13 @@ setup(
            'static/*/*/*',
         ],
     },
-    tests_require = [
+    tests_require=[
         'Django>=1.3',
-        'South>=0.7.2',
-        'psycopg2==2.4.1', # 2.4.2 causes trouble with Django 1.3(.1) unit tests
+        'South==0.7.3',
+        'psycopg2>=2.4.3',  # 2.4.2 causes trouble with Django 1.3(.1) unit tests
     ],
     test_suite='tests.main',
-    url = 'http://github.com/fairview/django-peavy',
-    version = peavy.get_version(),
-    zip_safe = True,
+    url='http://github.com/fairview/django-peavy',
+    version=peavy.get_version(),
+    zip_safe=True,
 )

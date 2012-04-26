@@ -47,10 +47,10 @@ LOGGING = {
             'format': '[%(asctime)s %(name)s %(levelname)s] %(message)s'
         },
         'basic': {
-            'format': '[%(asctime)s %(uuid)s %(user)s %(name)s %(levelname)s] %(message)s'
+            'format': '[%(asctime)s %(uuid)s %(user_pk)s:%(username)s %(name)s %(levelname)s] %(message)s'
         },
         'meta': {
-            'format': '[%(asctime)s %(client_ip)s %(uuid)s %(user)s %(name)s %(levelname)s] %(message)s'
+            'format': '[%(asctime)s %(client_ip)s %(uuid)s %(user_pk)s:%(username)s %(name)s %(levelname)s] %(message)s'
         },
     },
     'filters': {
@@ -63,12 +63,12 @@ LOGGING = {
     },
     'handlers': {
         'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
         },
         'console': {
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'filters': ['basic', 'meta'],
             'formatter': 'basic'
         },
@@ -89,7 +89,7 @@ LOGGING = {
         'django': {
             'handlers': ['null'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
         'django.request': {
             'handlers': ['peavy', 'mail_admins'],
@@ -98,11 +98,11 @@ LOGGING = {
         },
         'peavy': {
             'handlers': ['console', 'peavy'],
-            'level':'DEBUG',
+            'level': 'DEBUG',
         },
         'peavy_demo': {
             'handlers': ['console', 'peavy'],
-            'level':'DEBUG',
+            'level': 'DEBUG',
         },
     }
 }
@@ -133,4 +133,3 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 TEMPLATE_DEBUG = True
 TIME_ZONE = 'America/New_York'
 USE_I18N = True
-

@@ -158,19 +158,21 @@ Configuration
 
 5. Add ``peavy.middleware.RequestLoggingMiddleware`` to MIDDLEWARE_CLASSES.
 
-6. Run ``manage.py migrate`` to create the database tables, or if you're really
+6. Add ``django.core.context_processors.request`` to TEMPLATE_CONTEXT_PROCESSORS.
+
+7. Run ``manage.py migrate`` to create the database tables, or if you're really
    logging to a second database and have disabled South migrations for peavy,
    run ``manage.py syncdb``.
 
 The last two steps can be skipped if you don't want the UI.
 
-7. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
+8. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
 
     urlpatterns += patterns('',
         (r'^peavy/', include('peavy.urls', namespace='peavy')),
     )
 
-8. Run ``manage.py collectstatic`` to copy peavy's media into place.
+9. Run ``manage.py collectstatic`` to copy peavy's media into place.
 
 Demo Application
 ----------------
