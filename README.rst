@@ -50,14 +50,14 @@ Configuration
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'defaultdb',
             'USER': 'dbuser',
-            'PASSWORD': 'dbpassword,
+            'PASSWORD': 'dbpassword',
             'TEST_CHARSET': 'UTF8'
         },
         'peavy': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'defaultdb',
             'USER': 'dbuser',
-            'PASSWORD': 'dbpassword,
+            'PASSWORD': 'dbpassword',
             'TEST_CHARSET': 'UTF8'
         }
     }
@@ -100,10 +100,10 @@ Configuration
                 'format': '[%(asctime)s %(name)s %(levelname)s] %(message)s'
             },
             'basic': {
-                'format': '[%(asctime)s %(uuid)s %(user)s %(name)s %(levelname)s] %(message)s'
+                'format': '[%(asctime)s %(uuid)s %(user_pk)s:%(username)s %(name)s %(levelname)s] %(message)s'
             },
             'meta': {
-                'format': '[%(asctime)s %(client_ip)s %(uuid)s %(user)s %(name)s %(levelname)s] %(message)s'
+                'format': '[%(asctime)s %(client_ip)s %(uuid)s %(user_pk)s:%(username)s %(name)s %(levelname)s] %(message)s'
             },
         },
         'filters': {
