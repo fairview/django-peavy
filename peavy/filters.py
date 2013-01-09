@@ -37,3 +37,12 @@ class MetaFilter(logging.Filter):
 
         return True
 
+class RequestIDFilter(logging.Filter):
+    """Adds request id to logs"""
+
+    def filter(self, record):
+        request = RequestLoggingMiddleware.context.request
+        record.uuid = getattr(request, "uuid", "?")
+        meta = getattr(request, "META", {})
+        record.client_ip = meta.get("REMOTE_ADDR", "?")
+        return True
