@@ -70,7 +70,8 @@ Configuration
 
       $ django-admin.py migrate peavy --database=peavy
 
-   (Of course, if you chose a different name for the database, use that.)
+   (Of course, if you chose a different name for the database, use that in
+   these last two commands.)
 
    If you omit the app name, you may encounter errors with other apps whose
    migrations South tries to run.
