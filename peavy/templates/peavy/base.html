@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load url from future %}
 <html lang="en">
     <head>
         <title>peavy :: {% block title %}{% endblock title %}</title>
@@ -11,9 +12,9 @@
         <header>
             <nav id="nav1">
                 <ul>
-                    {% url 'home' as home_url %}
+                    {% url "home" as home_url %}
                     <li><a class="home" href="{{ home_url|default:"/" }}">home</a></li>
-                    <li><a class="dashboard" href="{% url 'peavy:dashboard' %}">dashboard</a></li>
+                    <li><a class="dashboard" href="{% url "peavy:dashboard" %}">dashboard</a></li>
                     {% block extra_nav %}{% endblock extra_nav %}
                 </ul>
             </nav>

@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n %}{% load url from future %}
+
 
 {% block main %}
 <h1>{% trans "django-peavy demo" %}</h1>
 
-{% url peavy:dashboard as peavy_dashboard %}
+{% url "peavy:dashboard" as peavy_dashboard %}
 <p>
 {% blocktrans %}
 Tell us one of your favorite quotes from a movie or TV series. You can then <a href="{{peavy_dashboard}}">check the logs</a> to see the record of your submission.
 {% endblocktrans %}
 </p>
-<form action="{% url home %}" method="post">
+<form action="{% url "home" %}" method="post">
     <div>
         {{form.submitter.label_tag}}
         {{form.submitter}}

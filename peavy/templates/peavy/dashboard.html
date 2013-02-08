@@ -1,5 +1,5 @@
 {% extends "peavy/base.html" %}
-{% load i18n humanize peavy %}
+{% load i18n humanize peavy %}{% load url from future %}
 
 {% block title %}{% trans "dashboard" %}{% endblock title %}
 
@@ -83,7 +83,7 @@
                 </div>
                 {% if record.debug_page and user.is_superuser %}
                 <div class="debug">
-                    <a target="_blank" href="{% url 'peavy:debug_page' record.pk %}">View debug page.</a>
+                    <a target="_blank" href="{% url "peavy:debug_page" record.pk %}">View debug page.</a>
                 </div>
                 {% endif %}
             </div>
