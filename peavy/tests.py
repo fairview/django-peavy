@@ -1,13 +1,14 @@
 import logging
 
 from django.db import transaction
-from django.test import TestCase
-from django.test.client import Client
+from django.test import TransactionTestCase
 
 from peavy.models import LogRecord
 from peavy_demo.models import Quote
 
-class TransactionTest(TestCase):
+
+class TransactionTest(TransactionTestCase):
+    multi_db = True
 
     def testTransactionSeparation(self):
         """
@@ -32,10 +33,10 @@ class TransactionTest(TestCase):
 
                 # peavy has just committed the log entry; now raise an
                 # exception to undo the quote creation
-                raise ValueError, 'As in: Fox miscalculated the value of Firefly.'
+                raise ValueError('As in: Fox miscalculated the value of Firefly.')
 
-        except ValueError, e:
+        except ValueError:
             pass
-        
+
         self.assertTrue(Quote.objects.count() == 0, 'The quote was not rolled back.')
         self.assertTrue(LogRecord.objects.count() == 1, 'The log entry was not made.')

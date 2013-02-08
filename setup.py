@@ -42,7 +42,7 @@ setup(
     },
     tests_require=[
         'Django>=1.3',
-        'South==0.7.3',
+        'South>=0.7.3',
         'psycopg2>=2.4.3',  # 2.4.2 causes trouble with Django 1.3(.1) unit tests
     ],
     test_suite='tests.main',

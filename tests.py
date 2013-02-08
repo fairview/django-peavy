@@ -11,6 +11,7 @@ print "sys.path:", sys.path
 from django.test.utils import get_runner
 from django.conf import settings
 
+
 def main():
     if 'south' in settings.INSTALLED_APPS:
         from south.management.commands import patch_for_test_db_setup
@@ -22,4 +23,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
