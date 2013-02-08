@@ -23,7 +23,7 @@ setup(
     download_url='http://github.com/fairview/django-peavy/downloads',
     install_requires=[
         'Django>=1.3',
-        'South>=0.7.3'
+        'South>=0.7.6'
     ],
     license="MIT License",
     name='django-peavy',
@@ -37,12 +37,12 @@ setup(
             'README.rst',
             'LICENSE.txt',
             'templates/*/*.html',
-           'static/*/*/*',
+            'static/*/*/*',
         ],
     },
     tests_require=[
         'Django>=1.3',
-        'South>=0.7.3',
+        'South>=0.7.6',
         'psycopg2>=2.4.3',  # 2.4.2 causes trouble with Django 1.3(.1) unit tests
     ],
     test_suite='tests.main',

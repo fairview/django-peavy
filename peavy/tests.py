@@ -12,10 +12,8 @@ class TransactionTest(TransactionTestCase):
 
     def testTransactionSeparation(self):
         """
-        Under the demo application's settings, the app and peavy both log to
-        the same database, but on different connections. This test verifies
-        that this means a rollback of an application write does not undo
-        the logging made in that code.
+        This test verifies that this means a rollback of an application write
+        does not undo the logging made in that code.
         """
         logger = logging.getLogger('peavy.tests.TransactionTest.testTransactionSeparation')
 

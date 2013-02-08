@@ -12,7 +12,7 @@ DATABASES = {
     },
     'peavy': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'peavy_demo',
+        'NAME': 'peavy_demo_peavy',
         'USER': 'peavy_demo',
         'PASSWORD': 'peavy_demo',
         'TEST_CHARSET': 'UTF8'

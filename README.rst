@@ -38,57 +38,42 @@ Configuration
 
 1. Add ``peavy`` to your ``INSTALLED_APPS`` setting.
 
-2. To avoid interfering with your application's database transactions, peavy
-   logs to its own database by default.
+2. Add the peavy database router::
 
-   The easiest way to make this work is to create a second database
-   stanza in settings.DATABASES, that mirrors the default settings under
-   another name, e.g.::
+    DATABASE_ROUTERS = ['peavy.routers.DjangoDBRouter']
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'defaultdb',
-            'USER': 'dbuser',
-            'PASSWORD': 'dbpassword',
-            'TEST_CHARSET': 'UTF8'
-        },
-        'peavy': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'defaultdb',
-            'USER': 'dbuser',
-            'PASSWORD': 'dbpassword',
-            'TEST_CHARSET': 'UTF8'
-        }
-    }
+3. Create a dedicated database for logging.
 
-   This should get your tables created/migrated properly, and allow peavy to
-   work with its own connection to the database. When it commits log entries,
-   your application's transactions won't be affected.
+   If you want to name it something other than 'peavy', you'll need to specify
+   it in ``settings.PEAVY_DATABASE_NAME``.
 
-   If you want to use a name other than 'peavy' for the peavy database, it
-   needs to be specified in settings.PEAVY_DATABASE_NAME.
+   The separate database makes schema management a little trickier than usual.
+   It needs to contain South's migration history table as well as Peavy's log
+   records.
 
-   If you want to put peavy in a truly separate database, you can still use
-   South by specifying both app and database when running peavy migrations::
+   So first, run syncdb on your default database::
+
+      $ django-admin.py syncdb
+   
+   And of course if you have other apps using South, migrate them::
+
+      $ django-admin.py migrate
+
+   This will actually create peavy tables in your default database. Sorry for
+   the debris; South isn't yet obeying database routers.
+   
+   Now on to peavy's database::
+
+      $ django-admin.py syncdb --database=peavy
+
+   Then run Peavy's South migrations::
 
       $ django-admin.py migrate peavy --database=peavy
 
-   If you omit the app name, you will probably encounter errors with other apps
-   whose migrations South tries to run.
+   (Of course, if you chose a different name for the database, use that.)
 
-   Finally, you can use a separate database but tell South to ignore it
-   completely by adding this to your settings::
-
-       SOUTH_MIGRATION_MODULES = {
-           'peavy': 'ignore',
-       }
-
-   In this case, you'll just create peavy's tables with syncdb.
-
-3. Add the peavy database router::
-
-    DATABASE_ROUTERS = ['peavy.routers.DjangoDBRouter']
+   If you omit the app name, you may encounter errors with other apps whose
+   migrations South tries to run.
 
 4. Add the logging configuration. For example::
 
@@ -160,19 +145,15 @@ Configuration
 
 6. Add ``django.core.context_processors.request`` to TEMPLATE_CONTEXT_PROCESSORS.
 
-7. Run ``manage.py migrate`` to create the database tables, or if you're really
-   logging to a second database and have disabled South migrations for peavy,
-   run ``manage.py syncdb``.
-
 The last two steps can be skipped if you don't want the UI.
 
-8. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
+7. If desired, add ``peavy.urls`` to your URL configuration to get the UI::
 
     urlpatterns += patterns('',
         (r'^peavy/', include('peavy.urls', namespace='peavy')),
     )
 
-9. Run ``manage.py collectstatic`` to copy peavy's media into place.
+8. Run ``manage.py collectstatic`` to copy peavy's media into place.
 
 Demo Application
 ----------------
@@ -190,10 +171,10 @@ and lets you check out the UI. To run it:
 
    $ pip install -r $VIRTUAL_ENV/peavy_demo/requirements.txt
 
-4. Set up the PostgreSQL database to match the Django settings. You can of
-   course use another database, but it has to support concurrent transactions
-   (so sqlite is out), and you'll have to adjust the settings and install the
-   adapter yourself.
+4. Set up the PostgreSQL databases to match the Django settings (see step 2
+   under Configuration, above). You can of course use another database, but it
+   has to support concurrent transactions (so sqlite is out), and you'll have
+   to adjust the settings and install the adapter yourself.
 
 5. Adjust your PYTHONPATH to pick up the demo app::
 
@@ -203,15 +184,11 @@ and lets you check out the UI. To run it:
 
    $ export DJANGO_SETTINGS_MODULE=peavy_demo.settings
 
-7. Run 'django-admin syncdb' to populate the database and create a superuser.
-
-8. Run 'django-admin migrate' to create peavy's tables.
-
-9. Run the devserver::
+7. Run the devserver::
 
    $ django-admin.py runserver
 
-10. Browse to http://localhost:8000/, enter a movie quote, then check the logging
+8. Browse to http://localhost:8000/, enter a movie quote, then check the logging
     at http://localhost:8000/peavy/.
 
 Notes
@@ -225,4 +202,3 @@ Future
 ------
 
 * support for logging to other sinks: message queues, non-relational databases.
-

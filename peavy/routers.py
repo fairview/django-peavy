@@ -27,3 +27,14 @@ class DjangoDBRouter(object):
         if obj1._meta.app_label == 'peavy' and obj2._meta.app_label == 'peavy':
             allow = True
         return allow
+
+    def allow_syncdb(self, db, model):
+        from django.conf import settings
+        db_name = getattr(settings, 'PEAVY_DATABASE_NAME', 'peavy')
+
+        allow = None
+        if db == db_name:
+            allow = model._meta.app_label in ['peavy', 'south']
+        elif model._meta.app_label == 'peavy':
+            allow = False
+        return allow
